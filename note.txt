@@ -6,3 +6,6 @@ CHANNEL_LAYERS = {
      },
     }
 - Giải thích: vì ở window, redis đucợ tích hợp sẵn tỏng channel nên không cần khai báo hót
+
+
+twisted-iocpsupport==1.0.2
