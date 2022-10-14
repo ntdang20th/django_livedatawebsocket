@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-5 pt-5">
+    <p>Percent complete: <span id="completed"></span></p>
+    <div class="progress">
+      <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+</div>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Age</th>
+      <th scope="col">Address</th>
+    </tr>
+  </thead>
+  <tbody id="table_data">
+
+  </tbody>
+</table>
+
+<script>
+    var url = 'ws://localhost:8000/ws/new/'
+
+    var socket = new WebSocket(url);
+
+    socket.onopen = function(e){
+        console.log('socket connected')
+    }
+
+    socket.onmessage = function(e){
+        var data = JSON.parse(e.data);
+        console.log(data);
+        if(data.data){
+            addData(data.data);
+            increaseProgress(data.data.total, data.data.current_total);
+        }
+    }
+
+    socket.onclose = function(e){
+        console.log('socket disconnected')
+    }
+
+    function addData(data){
+     var html = `
+            <tr>
+              <th scope="row">${data.id}</th>
+              <td>${data.student_name}</td>
+              <td>${data.student_email}</td>
+              <td>${data.age}</td>
+              <td>${data.address}</td>
+            </tr>
+            `
+     document.getElementById('table_data').innerHTML += html
+
+    }
+
+    function increaseProgress(total, current_total){
+        var element = document.querySelector('.progress-bar')
+
+        var percent = parseInt((current_total / total) * 100)
+
+        document.getElementById('completed').innerHTML = percent + '%'
+
+        element.style.width = percent + '%'
+    }
+</script>
+
+</body>
+</html>

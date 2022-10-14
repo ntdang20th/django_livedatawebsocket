@@ -1,0 +1,8 @@
+ASGI_APPLICATION = 'core.asgi.application'
+
+CHANNEL_LAYERS = {
+            "default": {
+         "BACKEND": "channels.layers.InMemoryChannelLayer",
+     },
+    }
+- Giải thích: vì ở window, redis đucợ tích hợp sẵn tỏng channel nên không cần khai báo hót
